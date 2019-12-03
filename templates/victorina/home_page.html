@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{#    <link rel="stylesheet" href="style.css">#}
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins');
+
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Poppins';
+    background: #fcfcf7;
+    padding: 5px;
+}
+
+label{
+    padding:5px;
+    color:#222;
+    font-family:corbel,sans-serif;
+    font-size: 14px;
+    margin: 10px;
+}
+
+input[type="radio"] {
+  margin-top: -1px;
+  vertical-align: middle;
+}
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: 400;
+
+}
+
+button {
+    border: 1px solid #e0e2e5;
+    background: #e0e2e5;
+    padding: 3px;
+    border-radius: 5px;
+
+}
+        input[type=radio] {
+            padding: 5px;
+            margin-right: 5px;
+        }
+
+        .buttons {
+            padding: 20px;
+        }
+
+        h3 {
+            background-color: #e1e1e8;
+            border-radius: 5px;
+        }
+
+        .result-button {
+            font-size: 20px;
+        }
+        .correct-answers-button {
+            font-size: 20px;
+        }
+
+    </style>
+    <title>Test your English BOOK</title>
+</head>
+{% block content %}
+<div class="jumbotron">
+  <h1 class="display-3">Dear student: {{ book }}</h1>
+  <p class="lead">If you want to improve your english skills you will have a chance to do it. Now I suggest you to
+complete some tests.</p>
+    <form action="victorinaPage/" method="get">
+<div class="buttons">
+
+
+                <input type="radio" name="book" class="answer-button" id='rd1' onclick="getBooksName()" value="L_RON_HUBBARD_MISSION_EARTH_05_FORTUNE_OF_FEAR.txt">
+                <label for="rd1">"Mission Earth" - L. Ron Hubbard</label><br/>
+
+                <input type="radio" name="book" class="answer-button" id='rd2' onclick="getBooksName()" value="clarissa_or_the_history_of_a_young_lady.txt">
+                <label for="rd2">"Clarissa" - Samuel Richardson</label><br/>
+
+                <input type="radio" name="book" class="answer-button" id='rd3' onclick="getBooksName()" value="khroniki_narnii.txt">
+                <label for="rd3">"The Chronicles of Narnia: The Lion, the Witch and the Wardrobe" - Clive Staples Lewis</label><br/>
+
+                <input type="radio" name="book" class="answer-button" id='rd4' onclick="getBooksName()" value="harry_potter_1.txt">
+                <label for="rd4">"Harry Potter" - Joanne Rowling</label><br/>
+{#                <div class="container" id="count_of_correct_{{ topic.id }}"></div>#}
+
+</div>
+{#        <form action="/victorinaApp/">#}
+{#            <button class="result-button" type="submit" onclick="sendBooksName()">BOOKS NAME</button>#}
+{#            </form>#}
+        <input type="submit" value=" Start ">
+    </form>
+{#<form action="/victorinaApp">#}
+{#    <button type="submit">GO</button>#}
+{#</form>#}
+</div>
+
+{% endblock %}
+<script>
+    is_defined = function (value) {
+        return typeof(value) !== 'undefined' && value !== null
+    };
+
+    function getBooksName()
+    {
+        answers = [];
+        var variant_mass = document.getElementsByName('book');
+        for (var i = 0; i < variant_mass.length; i++)
+        {
+            if (variant_mass[i].checked)
+            {
+                var ca = answers[i];
+                if(!is_defined(ca))
+                {
+                    answers.push(variant_mass[i].value);
+                }
+            }
+        }
+
+        return answers
+    }
+
+</script>

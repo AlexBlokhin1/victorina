@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{#    <link rel="stylesheet" href="style.css">#}
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Poppins');
+
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Poppins';
+    background: #fcfcf7;
+    padding: 5px;
+}
+
+.answer_color_right
+{
+    color : #009b19;
+
+}
+
+.answer_color_wrong
+{
+    color : #ff0000;
+}
+
+.answer_color_picked
+{
+    color : #34dbc7;
+}
+
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: 400;
+
+}
+
+.container_right_answer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: 400;
+}
+
+.container_wrong_answer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-weight: 400;
+}
+
+button {
+    border: 1px solid #e0e2e5;
+    background: #e0e2e5;
+    padding: 3px;
+    border-radius: 5px;
+
+}
+        input[type=radio] {
+            padding: 5px;
+            margin-right: 5px;
+        }
+
+        .buttons {
+            padding: 20px;
+        }
+
+        h3 {
+            background-color: #e1e1e8;
+            border-radius: 5px;
+        }
+
+        .result-button {
+            font-size: 20px;
+        }
+        .correct-answers-button {
+            font-size: 20px;
+        }
+
+    </style>
+    <title>Test your English</title>
+</head>
+<body>
+   <div class="main">
+    <div class="container">
+        <div class="single-question">
+            {% for topic in tests %}
+            <h3><span id="question_{{ topic.id }}">{{ topic.question }}</span></h3>
+
+            <div class="buttons">
+
+                <form action="index333.html">
+                <input type="radio" name="var" class="answer-button" id='variant_{{ topic.id }}' value="{{ topic.variant1 }}" onclick="counter('{{ topic.variant1 }}', '{{ topic.answer }}', '{{ topic.id }}'); parse_picked('{{ topic.id }}', '{{ topic.key_symbol }}', '{{ topic.variant1 }}', '{{ topic.answer }}');get_answers_mass(answers, {{ topic.id }}, '{{ topic.variant1 }}', '{{ topic.key_symbol }}', '{{ topic.answer }}')" value={{ topic.variant1 }}>{{ topic.variant1 }}
+                <input type="radio" name="var" class="answer-button" id='variant_{{ topic.id }}' value="{{ topic.variant2 }}" onclick="counter('{{ topic.variant2 }}', '{{ topic.answer }}', '{{ topic.id }}'); parse_picked('{{ topic.id }}', '{{ topic.key_symbol }}', '{{ topic.variant2 }}', '{{ topic.answer }}');get_answers_mass(answers, {{ topic.id }}, '{{ topic.variant2 }}', '{{ topic.key_symbol }}', '{{ topic.answer }}')" value={{ topic.variant2 }}>{{ topic.variant2 }}
+                <input type="radio" name="var" class="answer-button" id='variant_{{ topic.id }}' value="{{ topic.variant3 }}" onclick="counter('{{ topic.variant3 }}', '{{ topic.answer }}', '{{ topic.id }}'); parse_picked('{{ topic.id }}', '{{ topic.key_symbol }}', '{{ topic.variant3 }}', '{{ topic.answer }}');get_answers_mass(answers, {{ topic.id }}, '{{ topic.variant3 }}', '{{ topic.key_symbol }}', '{{ topic.answer }}')" value={{ topic.variant3 }}>{{ topic.variant3 }}
+                <input type="radio" name="var" class="answer-button" id='variant_{{ topic.id }}' value="{{ topic.variant4 }}" onclick="counter('{{ topic.variant4 }}', '{{ topic.answer }}', '{{ topic.id }}'); parse_picked('{{ topic.id }}', '{{ topic.key_symbol }}', '{{ topic.variant4 }}', '{{ topic.answer }}');get_answers_mass(answers, {{ topic.id }}, '{{ topic.variant4 }}', '{{ topic.key_symbol }}', '{{ topic.answer }}')" value={{ topic.variant4 }}>{{ topic.variant4 }}
+{#                <div class="container" id="count_of_correct_{{ topic.id }}"></div>#}
+                </form>
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>
+    <div class="result container">
+            <button class="result-button" type="submit" onclick="showResult(correctAnswers);parse_color(result_answers_mass)">Get result</button>
+            <h2 id="correctAnswersAmount"></h2>
+            <button class="correct-answers-button" type="submit" onclick="show_right_answers();disableButton(this)">Show correct answers</button>
+        <form action="/" method="get">
+            <button class="correct-answers-button" type="submit" > Try again</button>
+        </form>
+        </div>
+    </div>
+    <script>
+        var correctAnswers = 0;
+        var answers = [];
+        var result_answers_mass = [];
+
+is_defined = function (value) {
+        return typeof(value) !== 'undefined' && value !== null
+    };
+
+function counter(variant, answer, id) {
+//    if(variant === answer) {
+//        correctAnswers++;
+  //      console.log(correctAnswers);
+    //}
+    var variant_mass = document.getElementsByName('var');
+    var correct_index = 0;
+
+    for (var i = 0; i < variant_mass.length; i++)
+    {
+        if (variant_mass[i].checked)
+        {
+            var ca = answers[i];
+                if(variant_mass[i].value === answer)
+                {
+                    if(!is_defined(ca))
+                    {
+                        answers[i] = answer;
+                        correctAnswers++;
+                    }
+                }
+                else
+                {
+                    answers[i] = variant;
+                }
+        }
+
+        if(!variant_mass[i].checked)
+        {
+            var ca = answers[i];
+                     if(variant_mass[i].value === answer)
+                     {
+                         if(is_defined(ca))
+                         {
+                             delete answers[i];
+                             correctAnswers--;
+                         }
+                     }
+                     else
+                     {
+                         if(is_defined(ca))
+                         {
+                             delete answers[i];
+                         }
+                     }
+        }
+    }
+    console.log(correctAnswers);
+    console.log(answers);
+    return answers;
+}
+
+function get_answers_mass(mass, id, variant, key_symbol, answer)
+{
+
+    for(var i in mass)
+    {
+        result_answers_mass.push({'id': id, 'answer': answer, 'variant': variant, 'key_symbol': key_symbol});
+    }
+
+    console.log('RESULT_ANSWERS_MASS\n', result_answers_mass);
+    return result_answers_mass;
+}
+
+
+
+{##}
+{#function parse(id, key_symbol) {#}
+{#    var mass = [];#}
+{#    var element_id = 'question_' + id;#}
+{#    var question = document.getElementById(element_id);#}
+{#    var key_symbol_index = question.search(key_symbol);#}
+{#    mass.push(question.substring(question[0], key_symbol_index));#}
+{#    mass.push(key_symbol);#}
+{#    mass.push(question.substring(key_symbol_index + key_symbol.length, question.length));#}
+{#    console.log(alert(mass))#}
+{##}
+
+function showResult(answers, id) {
+
+    document.getElementById('correctAnswersAmount').innerHTML = correctAnswers + ' of 10';
+    {#document.getElementById('count_of_correct_' + id).innerHTML = correctAnswers + ' of 10';#}
+
+}
+
+{#function parse_color(id, key_symbol, variant, answer) {#}
+{#    var element_id = 'question_' + id;#}
+{#    var element = document.getElementById('variant_'+ element_id);#}
+{##}
+{#    var variant_mass = document.getElementsByName('var');#}
+{##}
+{#    //var txt = $('question_' + id).text();#}
+{#    var text = element.innerText;#}
+{#    for (var i = 0; i < variant_mass.length; i++)#}
+{#    {#}
+{#        if (variant_mass[i].checked)#}
+{#        {#}
+{#            if(variant === answer)#}
+{#            {#}
+{#                var new_variant = "<u class='answer_color_right' id='variant_" + id + "'>" + variant +  "</u>";#}
+{##}
+{#                break;#}
+{#            }#}
+{#            else#}
+{#                {#}
+{#                    var new_variant = "<u class='answer_color_wrong' id='variant_" + id + "'>" + variant +  "</u>";#}
+{#                }#}
+{#        }#}
+{##}
+{#    }#}
+{#    var key_symbol_index = text.search(key_symbol);#}
+{##}
+{#    if(key_symbol_index === -1)#}
+{#    {#}
+{#        var variant_id = document.getElementById("variant_" + id);#}
+{#        var cliked_answer = variant_id.innerText;#}
+{#        var new_string = text.replace(cliked_answer, new_variant);#}
+{#    }#}
+{#    else#}
+{#       {#}
+{#           var new_string = text.replace(key_symbol, new_variant);#}
+{#       }#}
+{##}
+{#    element.innerHTML = new_string;#}
+{##}
+{#    console.log("element_id:", element_id);#}
+{#    console.log("SENTENCE:", text)#}
+
+
+function parse_picked(id, key_symbol, variant, answer) {
+    var element_id = 'question_' + id;
+    var element = document.getElementById(element_id);
+
+    var variant_mass = document.getElementsByName('var');
+
+    //var txt = $('question_' + id).text();
+    var text = element.innerText;
+    for (var i = 0; i < variant_mass.length; i++)
+    {
+        if (variant_mass[i].checked)
+        {
+            if(variant === answer)
+            {
+                var new_variant = "<u class='answer_color_picked' id='variant_" + id + "'>" + variant +  "</u>";
+
+                break;
+            }
+            else
+                {
+                    var new_variant = "<u class='answer_color_picked' id='variant_" + id + "'>" + variant +  "</u>";
+                }
+        }
+
+    }
+    var key_symbol_index = text.search(key_symbol);
+
+    if(key_symbol_index === -1)
+    {
+        var variant_id = document.getElementById("variant_" + id);
+        var cliked_answer = variant_id.innerText;
+        var new_string = text.replace(cliked_answer, new_variant);
+    }
+    else
+       {
+           var new_string = text.replace(key_symbol, new_variant);
+       }
+
+    element.innerHTML = new_string;
+
+}
+
+function parse_color(mass) {
+    for(var i = 0; i < mass.length; i++)
+    {
+
+    var element_id = 'question_' + mass[i]["id"];
+    var element = document.getElementById(element_id);
+    var text = element.innerText;
+    console.log(text);
+        if(mass[i]['variant'] === mass[i]['answer'])
+        {
+            var new_variant = "<u class='answer_color_right' id='variant_" + mass[i]['id'] + "'>" + mass[i]['answer'] +  "</u>";
+
+        }
+        else
+            {
+                var new_variant = "<u class='answer_color_wrong' id='variant_" + mass[i]['id'] + "'>" + mass[i]['variant'] +  "</u>";
+            }
+
+    var variant_id = document.getElementById("variant_" + mass[i]['id']);
+    var clicked_answer = variant_id.innerText;
+    var new_string = text.replace(clicked_answer, new_variant);
+    element.innerHTML = new_string;
+    }
+
+    console.log(new_string);
+
+
+}
+
+
+function show_right_answers() {
+     {% for topic in tests %}
+
+
+    var element_id = 'question_' + '{{ topic.id }}';
+    var element = document.getElementById(element_id);
+    var text = element.innerText;
+    var key_symbol_index = text.search('{{ topic.key_symbol }}');
+
+    console.log(text);
+
+    {#var new_variant = "<u class='answer_color_right' id='question_" + '{{ topic.id }}'+  '{{ topic.answer }}' +  "</u>";#}
+    var new_variant = "<u class='answer_color_right' id='question_" + '{{ topic.id }}' + "'>" + '{{ topic.answer }}' +  "</u>";
+
+    var variant_id = document.getElementById("variant_" + '{{ topic.id }}');
+    var clicked_answer = variant_id.innerText;
+    if(key_symbol_index !== -1)
+    {
+        var new_string = text.replace('{{ topic.key_symbol }}', new_variant);
+    }
+    else
+        {
+            var new_string = text.replace(clicked_answer, new_variant);
+        }
+    element.innerHTML = new_string;
+    console.log(new_string);
+    {% endfor %}
+
+    console.log(new_string);
+}
+
+var button = document.getElementsByClassName('correct-answers-button');
+
+function disableButton(button)
+{
+    button.disabled = true;
+}
+
+
+    </script>
+</body>
+</html>
