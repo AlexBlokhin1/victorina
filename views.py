@@ -1,7 +1,7 @@
 import os
 from django.shortcuts import render
 from django.conf import settings
-from victorina.victorinaApp import load_text, parse_and_create, make_json_dictionary
+from victorina1.victorinaApp import load_text, parse_and_create, make_json_dictionary
 import random
 
 

@@ -1,5 +1,5 @@
 from django.urls import path, include
-from victorina import views
+from victorina1 import views
 
 urlpatterns = [
     path(r'', views.homepage, name='homePageVictorina'),
